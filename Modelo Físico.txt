@@ -1,0 +1,55 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.Users (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  Name character varying,
+  Nickname character varying,
+  Email character varying,
+  Photo character varying,
+  Bio text,
+  Password_hash character varying,
+  CONSTRAINT Users_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.Courses (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  User_id bigint,
+  Name character varying,
+  Institution character varying,
+  Hours bigint,
+  Conclusion_date date,
+  Certificate_file character varying,
+  Certificate_url character varying,
+  CONSTRAINT Courses_pkey PRIMARY KEY (id),
+  CONSTRAINT Courses_User_id_fkey FOREIGN KEY (User_id) REFERENCES public.Users(id)
+);
+CREATE TABLE public.Professional_experiences (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  User_id bigint,
+  Role character varying,
+  Company character varying,
+  Employment_type character varying,
+  Description text,
+  Current boolean,
+  Start_date date,
+  Final_date date,
+  Location character varying,
+  CONSTRAINT Professional_experiences_pkey PRIMARY KEY (id),
+  CONSTRAINT Professional_experiences_User_id_fkey FOREIGN KEY (User_id) REFERENCES public.Users(id)
+);
+CREATE TABLE public.Academic_Backgrounds (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  User_id bigint,
+  Course character varying,
+  Institution character varying,
+  Degree character varying,
+  Attending boolean,
+  Start_date date,
+  Conclusion_date date,
+  CONSTRAINT Academic_Backgrounds_pkey PRIMARY KEY (id),
+  CONSTRAINT Academic_Backgrounds_User_id_fkey FOREIGN KEY (User_id) REFERENCES public.Users(id)
+);

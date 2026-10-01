@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model academic_backgrounds {
+  id              BigInt    @id @default(autoincrement())
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  user_id         BigInt?
+  course          String?   @db.VarChar
+  institution     String?   @db.VarChar
+  degree          String?   @db.VarChar
+  attending       Boolean?
+  start_date      DateTime? @db.Date
+  conclusion_date DateTime? @db.Date
+  users           users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model courses {
+  id               BigInt    @id @default(autoincrement())
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  user_id          BigInt?
+  name             String?   @db.VarChar
+  institution      String?   @db.VarChar
+  hours            BigInt?
+  conclusion_date  DateTime? @db.Date
+  certificate_file String?   @db.VarChar
+  certificate_url  String?   @db.VarChar
+  users            users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model professional_experiences {
+  id              BigInt    @id @default(autoincrement())
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  user_id         BigInt?
+  role            String?   @db.VarChar
+  company         String?   @db.VarChar
+  employment_type String?   @db.VarChar
+  description     String?
+  current         Boolean?
+  start_date      DateTime? @db.Date
+  final_date      DateTime? @db.Date
+  location        String?   @db.VarChar
+  users           users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id                       BigInt                     @id @default(autoincrement())
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  name                     String?                    @db.VarChar
+  nickname                 String?                    @db.VarChar
+  email                    String?                    @db.VarChar
+  photo                    String?                    @db.VarChar
+  bio                      String?
+  password_hash            String?                    @db.VarChar
+  academic_backgrounds     academic_backgrounds[]
+  courses                  courses[]
+  professional_experiences professional_experiences[]
+}
